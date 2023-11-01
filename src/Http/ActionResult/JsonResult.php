@@ -4,15 +4,32 @@ declare(strict_types=1);
 
 namespace Neat\Http\ActionResult;
 
-class JsonResult extends ActionResult
+use Neat\Http\Utils\Json;
+
+final class JsonResult extends ActionResult
 {
     public function __construct(
-        string $httpStatusCode = 200,
-        string $httpStatusReason = 'OK',
-        array $result = [],
-        string $contentType = 'application/json'
-    )
+        public int $httpStatusCode = 200,
+        public object|array|null $result = null,
+        public string $contentType = 'application/json'
+    ) {
+    }
+
+    public function execute(): void
     {
-        parent::__construct($httpStatusCode, $httpStatusReason, $result, $contentType);
+        if ($this->result != null) {
+            
+            echo json_encode($this->format(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+    }
+
+    private function format(): object|array
+    {
+        if (is_array($this->result)) {
+
+            return $this->result;
+        }
+
+        return Json::fromObject($this->result);
     }
 }

@@ -81,14 +81,14 @@ class RoutingMatch implements RoutingMatchInterface
         } else {
 
             $nsClass = ucfirst(strtolower($this->pathParts[0])).'Controller';
+        }
 
-            // find in array
-            foreach ($this->controllers as $controller) {
+        // find in array
+        foreach ($this->controllers as $controller) {
 
-                if (str_ends_with($controller, '\\'.$nsClass)) {
-                    
-                    $nsClass = $controller;
-                }
+            if (str_ends_with($controller, '\\'.$nsClass)) {
+                
+                $nsClass = $controller;
             }
         }
 

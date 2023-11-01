@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace Neat\Http;
 
+use Neat\Contracts\Http\ActionResult\ActionResultInterface;
 use Neat\Contracts\Http\ResponseInterface;
-use Neat\Http\ActionResult\ActionResult;
 
 final class Response implements ResponseInterface
 {
-    private ActionResult $actionResult;
+    private ActionResultInterface $actionResult;
 
     private array $headers;
 
     public function __construct()
     {
-        $this->actionResult = new ActionResult();
-
         $this->headers = [];
     }
 
-    public function setActionResult(ActionResult $actionResult): void
+    public function setActionResult(ActionResultInterface $actionResult): void
     {
         $this->actionResult = $actionResult;
     }
@@ -32,6 +30,17 @@ final class Response implements ResponseInterface
 
     public function output(): void
     {
-        $this->actionResult->execute($this->headers);
+        // send status
+        http_response_code($this->actionResult->httpStatusCode);
+
+        // send headers
+        $this->headers[] = ['Content-Type: '.$this->actionResult->contentType.'; charset=UTF-8', true];
+
+        foreach ($this->headers as $header) {
+            header($header[0], $header[1]);
+        }
+
+        // execute result
+        $this->actionResult->execute();
     }
 }

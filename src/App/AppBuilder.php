@@ -201,8 +201,6 @@ class AppBuilder implements AppBuilderInterface
             $this->app->appContext()->provider(),
             $this->controllers
         ))->getResult());
-
-        $this->controllers = null;
     }
 
     /**

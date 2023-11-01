@@ -28,10 +28,11 @@
             "Neat\\Tests\\": "tests/"
         }
     },
-    "require": {},
-    "require-dev": {
-        "firebase/php-jwt": "^6.8.1",
+    "require": {
         "shopie/di-container": "^1.0"
+    },
+    "require-dev": {
+        "firebase/php-jwt": "^6.8.1"
     },
     "minimum-stability": "stable",
     "prefer-stable": true

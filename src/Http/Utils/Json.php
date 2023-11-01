@@ -12,9 +12,9 @@ use stdClass;
 class Json
 {
     /**
-     * Maps object to json
+     * Maps object to json output
      */
-    public static function fromObject(mixed $object): array
+    public static function fromObject(object $object): array
     {
         $json = [];
         
@@ -76,8 +76,6 @@ class Json
         $reflector = new ReflectionClass($object);
 
         $props = $reflector->getProperties(ReflectionProperty::IS_PRIVATE);
-
-        //print_r($props);
 
         foreach ($props as $prop) {
 

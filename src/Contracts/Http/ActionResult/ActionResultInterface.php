@@ -6,5 +6,8 @@ namespace Neat\Contracts\Http\ActionResult;
 
 interface ActionResultInterface
 {
+    /**
+     * Execute the result.
+     */
     public function execute(): void;
 }
