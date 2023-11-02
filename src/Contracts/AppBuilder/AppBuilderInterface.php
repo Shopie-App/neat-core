@@ -27,6 +27,11 @@ interface AppBuilderInterface
     public function useRouting(): void;
 
     /**
+     * Creates the controllers' collection.
+     */
+    public function addEndpoints(array $controllers): void;
+
+    /**
      * Build ensures components are added in the correct order.
      * 
      * @return App Returns the application instance.

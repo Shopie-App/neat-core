@@ -11,7 +11,6 @@ use Neat\Contracts\AppBuilder\AppBuilderInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
 use Neat\Http\MiddlewareChain;
 use Neat\Http\Routing\RoutingBuilder;
-use Neat\Middleware\ApiKey;
 use Neat\Middleware\PoweredBy;
 use Neat\Middleware\Routing;
 use Neat\Middleware\Security;
@@ -38,12 +37,6 @@ class AppBuilder implements AppBuilderInterface
      * @var bool
      */
     private bool $useRouting = false;
-
-    /**
-     * Add api key shield middleware flag.
-     * @var bool
-     */
-    private bool $addApiKeyShield = false;
 
     /**
      * Collection of controllers for routing.
@@ -100,11 +93,6 @@ class AppBuilder implements AppBuilderInterface
         $this->controllers = $controllers;
     }
 
-    public function addApiKeyShield(): void
-    {
-        $this->addApiKeyShield = true;
-    }
-
     /**
      * @inheritdoc
      */
@@ -119,14 +107,14 @@ class AppBuilder implements AppBuilderInterface
         // add middleware chain service
         $this->addMiddleware();
 
+        // add pre routing middleware
+        $this->addPreMiddlewares();
+
         // add routing service and middleware
         $this->addRouting();
 
-        // add other middlewares
-        $this->addUserDefinedMiddlewares();
-
-        // add user defined services to container collection
-        //(new Startup)->configuredServices($this->app->servicesContainer());
+        // add post routing middleware
+        $this->addPostMiddlewares();
 
         // return app instance
         return $this->app;
@@ -204,16 +192,22 @@ class AppBuilder implements AppBuilderInterface
     }
 
     /**
-     * Add other middleware services.
+     * Add middleware services that run after common ones and before routing.
      */
-    private function addUserDefinedMiddlewares(): void
+    private function addPreMiddlewares(): void
     {
         if (!$this->useMiddleware) {
             return;
         }
+    }
 
-        if ($this->addApiKeyShield) {
-            $this->middlewareChain->add(ApiKey::class);
+    /**
+     * Add middleware services that run after routing.
+     */
+    private function addPostMiddlewares(): void
+    {
+        if (!$this->useMiddleware) {
+            return;
         }
     }
 }

@@ -85,7 +85,7 @@ class App
             $this->middlewareChain->process($this->httpContext);
         }
 
-        // output response
+        // output result
         $this->output();
 
         // shutdown

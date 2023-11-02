@@ -28,11 +28,7 @@ class MiddlewareChain implements MiddlewareChainInterface
             return $context->response();
         }
 
-        //try {
         return (new $mware[0](...$mware[1]))->handle($context, $this->process(...));
-        //} catch (\Exception $ex) {
-          //  return $context->response();
-        //}
     }
 
     private function getNext(): array

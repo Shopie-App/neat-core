@@ -33,9 +33,10 @@ final class Response implements ResponseInterface
         // send status
         http_response_code($this->actionResult->httpStatusCode);
 
-        // send headers
+        // set content type header
         $this->headers[] = ['Content-Type: '.$this->actionResult->contentType.'; charset=UTF-8', true];
 
+        // send headers
         foreach ($this->headers as $header) {
             header($header[0], $header[1]);
         }
