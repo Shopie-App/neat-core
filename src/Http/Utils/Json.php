@@ -12,7 +12,8 @@ use stdClass;
 class Json
 {
     /**
-     * Maps object to json output
+     * Maps object to json output. Only private properties that are
+     * initialized will be added.
      */
     public static function fromObject(object $object): array
     {
@@ -24,7 +25,7 @@ class Json
     }
 
     /**
-     * Maps json input to object
+     * Maps json input to object.
      */
     public static function toObject(stdClass $json, object $object): mixed
     {
@@ -49,25 +50,30 @@ class Json
             // get json attribute
             $attrs = $prop->getAttributes(AttrJson::class);
 
+            // no attribute, set property name as key
             if (empty($attrs)) {
-                continue;
-            }
 
-            // should only be one item in the attrs array
-            $args = $attrs[0]->getArguments();
+                $key = $prop->getName();
+            } else {
 
-            if (empty($args)) {
-                continue;
+                // get key name
+                $key = $attrs[0]->newInstance()->key();
+
+                // no value?
+                if ($key == '') {
+
+                    $key = $prop->getName();
+                }
             }
 
             // scalar type assign and go to next
             if ($prop->getType()->isBuiltin()) {
-                $json[$args[0]] = $prop->getValue($object);
+                $json[$key] = $prop->getValue($object);
                 continue;
             }
 
-            $json[$args[0]] = [];
-            self::fromObjectLoop($json[$args[0]], $prop->getValue($object));
+            $json[$key] = [];
+            self::fromObjectLoop($json[$key], $prop->getValue($object));
         }
     }
 

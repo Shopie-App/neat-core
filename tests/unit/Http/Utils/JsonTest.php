@@ -16,6 +16,13 @@ final class JsonTest extends TestCase
 
         $this->assertArrayHasKey('id', $arr);
         $this->assertArrayHasKey('title', $arr);
+        $this->assertArrayHasKey('test_name', $arr);
+        //$this->assertArrayHasKey('testCity', $arr);
+
+        $this->assertSame(1, $arr['id']);
+        $this->assertSame('This is a test title', $arr['title']);
+        $this->assertSame('My name', $arr['test_name']);
+        //$this->assertSame('Athens', $arr['testCity']);
     }
 
     public function testComplexMarshal(): void
@@ -40,10 +47,17 @@ class testSimpleObject
     #[Json('title')]
     private string $testTitle;
 
+    private string $test_name;
+
+    // not initialized, will not be added
+    private string $testCity;
+
     public function __construct()
     {
         $this->testId = 1;
         $this->testTitle = 'This is a test title';
+        $this->test_name = 'My name';
+        //$this->testCity = 'Athens';
     }
 }
 

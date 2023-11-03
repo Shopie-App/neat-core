@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Neat\App;
 
 use Neat\App\App;
+use Neat\Authentication\AuthenticationBuilder;
 use Neat\Contexts\AppContextBuilder;
 use Neat\Contexts\HttpContextBuilder;
 use Neat\Contracts\AppBuilder\AppBuilderInterface;
+use Neat\Contracts\Authentication\AuthenticationOptionsInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
 use Neat\Http\MiddlewareChain;
 use Neat\Http\Routing\RoutingBuilder;
@@ -37,6 +39,12 @@ class AppBuilder implements AppBuilderInterface
      * @var bool
      */
     private bool $useRouting = false;
+
+    /**
+     * Add authentication service flag.
+     * @var bool
+     */
+    private bool $useAuthentication = false;
 
     /**
      * Collection of controllers for routing.
@@ -82,15 +90,23 @@ class AppBuilder implements AppBuilderInterface
         $this->useMiddleware = true;
     }
 
+    public function useAuthentication(): void
+    {
+        $this->useRouting();
+
+        $this->useAuthentication = true;
+    }
+
     public function addEndpoints(array $controllers): void
     {
-        $this->useRouting = true;
-
-        $this->useHttp = true;
-
-        $this->useMiddleware = true;
+        $this->useRouting();
 
         $this->controllers = $controllers;
+    }
+
+    public function addAuthentication(string $provider, AuthenticationOptionsInterface $options): AuthenticationBuilder
+    {
+        return new AuthenticationBuilder($provider, $options);
     }
 
     /**
@@ -169,8 +185,6 @@ class AppBuilder implements AppBuilderInterface
 
         $this->middlewareChain->add(PoweredBy::class);
 
-        // add authentication middlewares
-
         // set to application
         $this->app->setMiddlewareChain($this->middlewareChain);
     }
@@ -198,6 +212,12 @@ class AppBuilder implements AppBuilderInterface
     {
         if (!$this->useMiddleware) {
             return;
+        }
+
+        // authentication
+        if ($this->useAuthentication) {
+
+            // add authentication middleware
         }
     }
 

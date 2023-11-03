@@ -25,7 +25,15 @@ class AuthenticationBuilder
         return $this;
     }
 
-    public function getResult(): AuthenticationInterface|null
+    public function addChallenge(string $name): AuthenticationBuilder
+    {
+        return $this;
+    }
+
+    /**
+     * getResult()
+     */
+    public function build(): AuthenticationInterface|null
     {
         return AuthenticationFactory::create($this->authProvider, $this->options);
     }
