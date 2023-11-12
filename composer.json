@@ -16,9 +16,6 @@
         }
     ],
     "autoload": {
-        "files": [
-            "src/Http/Status/HttpStatus.php"
-        ],
         "psr-4": {
             "Neat\\": "src/"
         }

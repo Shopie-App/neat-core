@@ -67,6 +67,11 @@ class Request implements RequestInterface
         return $_SERVER['HTTP_'.strtoupper(str_replace('-', '_', $key))] ?? null;
     }
 
+    public function cookie(string $key): string|null
+    {
+        return $_COOKIE[$key] ?? null;
+    }
+
     public function setArgs(stdClass $args): void
     {
         $this->args = $args;

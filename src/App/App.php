@@ -71,7 +71,10 @@ class App
      */
     public function addCustom(string $className): void
     {
-        (new $className())->configuredServices($this->appContext()->service());
+        (new $className())->configuredServices(
+            $this->appContext()->service(),
+            $this->appContext()->provider()
+        );
     }
 
     /**

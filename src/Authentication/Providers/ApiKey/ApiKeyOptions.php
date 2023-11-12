@@ -8,7 +8,7 @@ use Neat\Contracts\Authentication\AuthenticationOptionsInterface;
 
 readonly class ApiKeyOptions
 {
-    public string $apiKey;
+    public readonly string $apiKey;
 
     public function __construct(AuthenticationOptionsInterface $options)
     {

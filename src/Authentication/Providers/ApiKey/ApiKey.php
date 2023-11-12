@@ -13,11 +13,15 @@ final class ApiKey extends Authentication
     {
     }
 
-    /**
-     * TODO
-     */
-    public function authenticate(): AuthenticationResult
+    public function authenticate(string $challenge): AuthenticationResult
     {
-        return new AuthenticationResult();
+        $result = strcmp($challenge, $this->options->apiKey);
+
+        if ($result != 0) {
+
+            return new AuthenticationResult(false);
+        }
+
+        return new AuthenticationResult(true);
     }
 }

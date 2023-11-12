@@ -6,19 +6,12 @@ namespace Neat\Authentication;
 
 class AuthenticationResult
 {
-    private bool $succeeded = false;
-
-    public function __construct()
+    public function __construct(private readonly bool $succeeded)
     {
     }
 
     public function succeeded(): bool
     {
         return $this->succeeded;
-    }
-
-    public function success(): void
-    {
-        $this->succeeded = true;
     }
 }

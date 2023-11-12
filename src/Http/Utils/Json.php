@@ -88,6 +88,7 @@ class Json
             // get json attributes
             $attrs = $prop->getAttributes(AttrJson::class);
 
+            // no json attribute, don't add
             if (empty($attrs)) {
                 continue;
             }
@@ -96,14 +97,25 @@ class Json
             $args = $attrs[0]->getArguments();
 
             if (empty($args)) {
-                continue;
+
+                $key = $prop->getName();
+            } else {
+
+                // get key name
+                $key = $attrs[0]->newInstance()->key();
+
+                // no value?
+                if ($key == '') {
+
+                    $key = $prop->getName();
+                }
             }
 
             // scalar type assign and go to next
             if ($prop->getType()->isBuiltin()) {
 
-                if (isset($json->{$args[0]})) {
-                    $prop->setValue($object, $json->{$args[0]});
+                if (isset($json->$key)) {
+                    $prop->setValue($object, $json->$key);
                 }
 
                 continue;
@@ -113,13 +125,13 @@ class Json
             $newObject = new ($prop->getType()->getName())();
 
             // set its properties only if in json
-            if (isset($json->{$args[0]})) {
+            if (isset($json->$key)) {
 
                 // set it
                 $prop->setValue($object, $newObject);
 
                 // add properties
-                self::toObjectLoop($json->{$args[0]}, $newObject);
+                self::toObjectLoop($json->$key, $newObject);
             }
         }
     }

@@ -8,6 +8,14 @@ use Neat\Http\ActionResult\ActionResult;
 use Neat\Http\ActionResult\JsonResult;
 
 /**
+ * Composer file autoloading includes it on evey request.
+ * Using a dummy class, thes functions are loaded on demand.
+ */
+class HttpStatus
+{
+}
+
+/**
  * 200 OK
  */
 function OK(object|array $result = null): ActionResult

@@ -10,6 +10,7 @@ use Neat\Http\Request;
 use Neat\Http\Routing\Routing;
 use Neat\Http\Routing\RoutingAction;
 use Neat\Http\Routing\RoutingMatch;
+use Neat\Http\Status\HttpStatus;
 use Neat\Tests\Stubs\UsersController;
 use PHPUnit\Framework\TestCase;
 
@@ -17,8 +18,8 @@ final class RoutingTest extends TestCase
 {
     public function testRouting(): void
     {
-        //require_once 'src/App/Core/Http/Status/HttpStatus.php';
-
+        new HttpStatus;
+        
         // create request mock
         $req = $this->createStub(Request::class);
         $req->expects($this->any())->method('body')->willReturn(json_decode('{"id":"999","title":"Test Product Title","properties":{"id":"3","type_id":"3"}}'));

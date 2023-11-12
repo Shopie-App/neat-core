@@ -24,6 +24,8 @@ interface RequestInterface
 
     public function header(string $key): string|null;
 
+    public function cookie(string $key): string|null;
+
     public function setArgs(stdClass $args): void;
 
     public function loadHost(): void;

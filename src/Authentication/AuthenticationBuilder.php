@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Neat\Authentication;
 
-use Neat\Contracts\Authentication\AuthenticationInterface;
+use Neat\Contexts\HttpContext;
 use Neat\Contracts\Authentication\AuthenticationOptionsInterface;
 
 class AuthenticationBuilder
 {
+    private string $cookieName;
+
+    private string $headerName;
+
     public function __construct(
+        private HttpContext $httpContext,
         private string $authProvider,
         private AuthenticationOptionsInterface $options
     ) {
@@ -17,24 +22,42 @@ class AuthenticationBuilder
 
     public function addCookie(string $name): AuthenticationBuilder
     {
+        $this->cookieName = $name;
+
         return $this;
     }
 
     public function addHeader(string $name): AuthenticationBuilder
     {
-        return $this;
-    }
+        $this->headerName = $name;
 
-    public function addChallenge(string $name): AuthenticationBuilder
-    {
         return $this;
     }
 
     /**
      * getResult()
      */
-    public function build(): AuthenticationInterface|null
+    public function build(): Authentication|null
     {
-        return AuthenticationFactory::create($this->authProvider, $this->options);
+        if (($authenticator = AuthenticationFactory::create($this->authProvider, $this->options)) === null) {
+
+            return null;
+        }
+
+        $authProxy = new AuthenticationFacade($authenticator);
+
+        $authenticator = null;
+
+        if ((new \ReflectionProperty($this, 'cookieName'))->isInitialized($this)) {
+            
+            $authProxy->setCookieChallenge($this->httpContext->request()->cookie($this->cookieName));
+        }
+
+        if ((new \ReflectionProperty($this, 'headerName'))->isInitialized($this)) {
+            
+            $authProxy->setHeaderChallenge($this->httpContext->request()->header($this->headerName));
+        }
+
+        return $authProxy;
     }
 }

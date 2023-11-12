@@ -16,7 +16,7 @@ final class JwtBearer extends Authentication
     /**
      * TODO
      */
-    public function authenticate(): AuthenticationResult
+    public function authenticate(string $challenge): AuthenticationResult
     {
         return new AuthenticationResult();
     }
@@ -26,7 +26,7 @@ final class JwtBearer extends Authentication
      */
     public function signIn(): string|false
     {
-        $token = (new JwtIssuer($this->options->key(), $this->options->issuer()))->issue(11, 300, $this->options->claims());
+        $token = (new JwtIssuer($this->options->key, $this->options->issuer))->issue(11, 300, $this->options->claims);
         return '';
     }
     

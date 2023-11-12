@@ -8,7 +8,7 @@ use Neat\Authentication\AuthenticationResult;
 
 interface AuthenticationInterface
 {
-    public function authenticate(): AuthenticationResult;
+    public function authenticate(string $challenge): AuthenticationResult;
 
     public function signIn(): mixed;
     

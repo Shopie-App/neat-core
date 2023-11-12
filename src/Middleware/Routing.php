@@ -21,7 +21,7 @@ final class Routing implements MiddlewareInterface
         // match route to controller
         if (!$this->route->match($context->request()->uri(), $context->request()->method())) {
 
-            NotFound(['error' => 'Invalid path requested']);
+            $context->response()->setActionResult(NotFound(['error' => 'Invalid path requested']));
 
             return $context->response();
         }

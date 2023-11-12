@@ -21,10 +21,10 @@ class AuthenticationFactory
         $authProvider = null;
 
         switch ($provider) {
-            case ApiKey::class:
+            case 'ApiKey':
                 $authProvider = new ApiKey(new ApiKeyOptions($options));
                 break;
-            case JwtBearer::class:
+            case 'JwtBearer':
                 $authProvider = new JwtBearer(new JwtBearerOptions($options));
                 break;
         }

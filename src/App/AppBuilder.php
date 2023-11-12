@@ -13,6 +13,7 @@ use Neat\Contracts\Authentication\AuthenticationOptionsInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
 use Neat\Http\MiddlewareChain;
 use Neat\Http\Routing\RoutingBuilder;
+use Neat\Http\Status\HttpStatus;
 use Neat\Middleware\PoweredBy;
 use Neat\Middleware\Routing;
 use Neat\Middleware\Security;
@@ -165,6 +166,8 @@ class AppBuilder implements AppBuilderInterface
             $this->app->appContext()->service(),
             $this->app->appContext()->provider()
         ))->getResult());
+
+        new HttpStatus;
     }
 
     /**
