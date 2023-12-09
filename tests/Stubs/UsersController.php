@@ -31,7 +31,7 @@ class UsersController
     }
 
     /** 
-     * Get a user by id. Id could be int or string
+     * Get a user by id. Id could be int ({id:int}) or string ({id})
      */
     #[HttpGet('/{id}')]
     public function getOne(int $userId): ActionResult

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Neat\Tests\Stubs;
 
-use Neat\Contracts\Container\ServiceContainerInterface;
+use Shopie\DiContainer\Contracts\ServiceContainerInterface;
 
 class Startup
 {

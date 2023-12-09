@@ -105,10 +105,10 @@ class AppBuilder implements AppBuilderInterface
         $this->controllers = $controllers;
     }
 
-    public function addAuthentication(string $provider, AuthenticationOptionsInterface $options): AuthenticationBuilder
+    /*public function addAuthentication(string $provider, AuthenticationOptionsInterface $options): AuthenticationBuilder
     {
         return new AuthenticationBuilder($provider, $options);
-    }
+    }*/
 
     /**
      * @inheritdoc

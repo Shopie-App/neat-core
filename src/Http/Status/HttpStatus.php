@@ -8,8 +8,8 @@ use Neat\Http\ActionResult\ActionResult;
 use Neat\Http\ActionResult\JsonResult;
 
 /**
- * Composer file autoloading includes it on evey request.
- * Using a dummy class, thes functions are loaded on demand.
+ * Composer file autoloading includes it on evey request, using a 
+ * dummy class, these functions are loaded on demand.
  */
 class HttpStatus
 {

@@ -6,9 +6,11 @@ use Shopie\DiContainer\ServiceCollection;
 use Shopie\DiContainer\ServiceContainer;
 use Neat\Contexts\AppContext;
 use Neat\Http\ActionResult\ActionResult;
+use Neat\Http\ActionResult\HttpResult;
 use Neat\Http\Request;
 use Neat\Http\Routing\RoutingAction;
 use Neat\Http\Routing\RoutingInfo;
+use Neat\Http\Status\HttpStatus;
 use Neat\Tests\Stubs\User;
 use Neat\Tests\Stubs\UsersController;
 use PHPUnit\Framework\TestCase;
@@ -37,6 +39,9 @@ final class RoutingActionTest extends TestCase
         $req = $this->createStub(Request::class);
         $req->expects($this->any())->method('get')->willReturn((object) ['queryInt' => 5674]);
 
+        // add global http status functions
+        new HttpStatus;
+
         // build a service container mock object
         $service = new ServiceContainer(new ServiceCollection());
 
@@ -57,9 +62,8 @@ final class RoutingActionTest extends TestCase
 
         // assert result
         $this->assertInstanceOf(ActionResult::class, $actionResult);
-        $this->assertEquals(200, $actionResult->httpStatusCode());
-        $this->assertEquals('OK', $actionResult->httpStatusReason());
-        $this->assertIsArray($actionResult->result());
-        $this->assertEquals('text/plain', $actionResult->contentType());
+        $this->assertEquals(200, $actionResult->httpStatusCode);
+        $this->assertIsArray($actionResult->result);
+        $this->assertEquals('application/json', $actionResult->contentType);
     }
 }
