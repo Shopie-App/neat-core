@@ -8,5 +8,10 @@ use Neat\Contexts\HttpContext;
 
 interface HttpContextBuilderInterface
 {
+    /**
+     * Builds the HTTP context.
+     * 
+     * @return HttpContext
+     */
     public function getResult(): HttpContext;
 }
