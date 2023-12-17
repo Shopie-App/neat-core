@@ -6,13 +6,7 @@
     "authors": [
         {
             "name": "Shopie",
-            "email": "support@shopie.gr"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:Shopie-App/di-container.git"
+            "email": "dev@shopie.gr"
         }
     ],
     "autoload": {
