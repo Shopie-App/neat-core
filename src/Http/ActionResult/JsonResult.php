@@ -30,6 +30,6 @@ final class JsonResult extends ActionResult
             return $this->result;
         }
 
-        return Json::fromObject($this->result);
+        return Json::marshal($this->result);
     }
 }
