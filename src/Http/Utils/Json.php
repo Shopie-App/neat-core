@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Neat\Http\Utils;
 
-use Neat\Attributes\Json\Json as AttrJson;
+use Neat\Attributes\Json\Json as AttributeJson;
 use ReflectionClass;
 use ReflectionProperty;
 use stdClass;
@@ -12,29 +12,43 @@ use stdClass;
 class Json
 {
     /**
-     * Maps object to json output. Only private properties that are
-     * initialized will be added.
+     * Maps object or collection of same object type to key/value array.
+     * 
+     * Only private properties that are initialized will be added.
      */
-    public static function fromObject(object $object): array
+    public static function marshal(object|array $objectOrArray): array
     {
         $json = [];
         
-        self::fromObjectLoop($json, $object);
+        if (is_array($objectOrArray)) {
+
+            foreach ($objectOrArray as $object) {
+
+                $arrSingle = [];
+
+                self::marshalLoop($arrSingle, $object);
+
+                $json[] = $arrSingle;
+            }
+        } else {
+
+            self::marshalLoop($json, $objectOrArray);
+        }
 
         return $json;
     }
 
     /**
      * Maps json input to object.
+     * 
+     * Properties with no Json attribute are not added.
      */
-    public static function toObject(stdClass $json, object $object): mixed
+    public static function unMarshal(stdClass $json, object $object): void
     {
-        self::toObjectLoop($json, $object);
-
-        return $object;
+        self::unMarshalLoop($json, $object);
     }
 
-    private static function fromObjectLoop(array &$json, object $object): void
+    private static function marshalLoop(array &$json, object $object): void
     {
         $reflector = new ReflectionClass($object);
 
@@ -48,7 +62,7 @@ class Json
             }
 
             // get json attribute
-            $attrs = $prop->getAttributes(AttrJson::class);
+            $attrs = $prop->getAttributes(AttributeJson::class);
 
             // no attribute, set property name as key
             if (empty($attrs)) {
@@ -66,18 +80,28 @@ class Json
                 }
             }
 
+            // get type (supports only named types)
+            $type = $prop->getType();
+
             // scalar type assign and go to next
-            if ($prop->getType()->isBuiltin()) {
+            if ($type->isBuiltin()) {
                 $json[$key] = $prop->getValue($object);
                 continue;
             }
 
+            // handle dates
+            if ($type->getName() == 'DateTime') {
+                $json[$key] = $prop->getValue($object)->format('Y-m-d H:i:s');
+                continue;
+            }
+
             $json[$key] = [];
-            self::fromObjectLoop($json[$key], $prop->getValue($object));
+
+            self::marshalLoop($json[$key], $prop->getValue($object));
         }
     }
 
-    private static function toObjectLoop(stdClass $json, object $object): void
+    private static function unMarshalLoop(stdClass $json, object $object): void
     {
         $reflector = new ReflectionClass($object);
 
@@ -86,7 +110,7 @@ class Json
         foreach ($props as $prop) {
 
             // get json attributes
-            $attrs = $prop->getAttributes(AttrJson::class);
+            $attrs = $prop->getAttributes(AttributeJson::class);
 
             // no json attribute, don't add
             if (empty($attrs)) {
@@ -115,7 +139,7 @@ class Json
             if ($prop->getType()->isBuiltin()) {
 
                 if (isset($json->$key)) {
-                    $prop->setValue($object, $json->$key);
+                    $prop->setValue($object, self::castValue($prop->getType()->getName(), $json->$key));
                 }
 
                 continue;
@@ -131,8 +155,28 @@ class Json
                 $prop->setValue($object, $newObject);
 
                 // add properties
-                self::toObjectLoop($json->$key, $newObject);
+                self::unMarshalLoop($json->$key, $newObject);
             }
         }
+    }
+
+    /**
+     * Cast a value to correct type.
+     */
+    private static function castValue($type, $value): mixed
+    {
+        $castedValue = null;
+
+        switch ($type) {
+            case 'bool': $castedValue = (bool) $value;
+                break;
+            case 'int': $castedValue = (int) $value;
+                break;
+            case 'float': $castedValue = (float) $value;
+                break;
+            default: $castedValue = $value;
+        }
+
+        return $castedValue;
     }
 }
