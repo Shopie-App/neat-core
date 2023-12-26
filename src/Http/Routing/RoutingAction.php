@@ -11,6 +11,7 @@ use Neat\Contexts\AppContext;
 use Neat\Contracts\Http\RequestInterface;
 use Neat\Contracts\Http\Routing\RoutingActionInterface;
 use Neat\Http\ActionResult\ActionResult;
+use ReflectionNamedType;
 
 class RoutingAction implements RoutingActionInterface
 {
@@ -70,7 +71,8 @@ class RoutingAction implements RoutingActionInterface
         foreach ($methodParams as $param) {
 
             // type
-            $type = $param->getType()->getName();
+            /** @var ReflectionNamedType $type */
+            $type = $param->getType();
 
             // get attributes if any
             $attrs = $param->getAttributes();
@@ -79,7 +81,7 @@ class RoutingAction implements RoutingActionInterface
             if (empty($attrs)) {
 
                 // add casted value
-                $params[] = isset($pathParams[0]) ? $this->cast($type, $pathParams[0]): null;
+                $params[] = isset($pathParams[0]) ? $this->cast($type->getName(), $pathParams[0]): null;
 
                 // remove from array checked index
                 if (!empty($pathParams)) {
@@ -99,7 +101,7 @@ class RoutingAction implements RoutingActionInterface
 
             } else if ($attrs[0]->getName() === FromBody::class) {
 
-                $params[] = $attrs[0]->newInstance()->loadObject($type, $this->httpRequest);
+                $params[] = $attrs[0]->newInstance()->loadObject($type->getName(), $this->httpRequest);
             }
         }
 

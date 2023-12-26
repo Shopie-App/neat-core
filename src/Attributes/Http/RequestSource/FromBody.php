@@ -20,6 +20,10 @@ class FromBody
      */
     public function loadObject(string $type, Request $httpRequest): mixed
     {
-        return Json::toObject($httpRequest->body(), new $type());
+        $object = new $type();
+        
+        Json::unMarshal($httpRequest->body(), $object);
+
+        return $object;
     }
 }

@@ -73,7 +73,7 @@ class UsersController
     #[HttpPost]
     public function addUser(#[FromBody] User $user): ActionResult
     {
-        return OK(Json::fromObject($user));
+        return OK(Json::marshal($user));
     }
 
     /**
