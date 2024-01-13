@@ -17,7 +17,7 @@ class FromQuery
     /**
      * Gets object from http get query parameter.
      */
-    public function loadObject(string $key, Request $httpRequest): mixed
+    public function loadObject(string $key, Request $httpRequest): ?string
     {
         if ($this->name !== null) {
 

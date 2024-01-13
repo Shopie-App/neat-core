@@ -96,8 +96,10 @@ class RoutingAction implements RoutingActionInterface
             // currently supporting from query, from post and from body
             // $attrs[0]->getName() === FromQuery::class || $attrs[0]->getName() === FromPost::class
             if (in_array($attrs[0]->getName(), [FromQuery::class, FromPost::class])) {
+
+                $uriParamValue = $attrs[0]->newInstance()->loadObject($param->getName(), $this->httpRequest);
                 
-                $params[] = $attrs[0]->newInstance()->loadObject($param->getName(), $this->httpRequest);
+                $params[] = $uriParamValue === null ? null : $this->cast($type->getName(), $uriParamValue);
 
             } else if ($attrs[0]->getName() === FromBody::class) {
 
@@ -121,7 +123,12 @@ class RoutingAction implements RoutingActionInterface
 
         $deps = [];
         foreach ($params as $param) {
-            $deps[] = !$param->getType()->isBuiltin() && !$param->isDefaultValueAvailable() ? $this->context->provider()->getService($param->getType()->getName()): $param->getDefaultValue();
+
+            /** @var ReflectionNamedType $type */
+            $type = $param->getType();
+
+            $deps[] = !$type->isBuiltin() && !$param->isDefaultValueAvailable() 
+            ? $this->context->provider()->getService($type->getName()) : $param->getDefaultValue();
         }
 
         return $deps;
@@ -134,6 +141,8 @@ class RoutingAction implements RoutingActionInterface
         // TODO: safe escape string
         switch ($type) {
             case 'int': $newValue = (int) $value;
+                break;
+            case 'float': $newValue = (float) $value;
                 break;
             default: $newValue = strval($value);
         }

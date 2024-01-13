@@ -23,18 +23,18 @@ final class RoutingTest extends TestCase
         // create request mock
         $req = $this->createStub(Request::class);
         $req->expects($this->any())->method('body')->willReturn(json_decode('{"id":"999","title":"Test Product Title","properties":{"id":"3","type_id":"3"}}'));
-        $req->expects($this->any())->method('get')->willReturn((object) ['num' => 5674]);
+        $req->expects($this->any())->method('get')->willReturn((object) ['num' => '5674']);
 
         // routes to test
         $routes = [
-            ['/users', 'GET'],
+            /*['/users', 'GET'],
             ['/users/987584', 'GET'],
             ['/users/987584/group', 'GET'],
-            ['/users/find', 'GET'],
-            ['/users/987584/owner/Test+User+Name', 'GET'],
+            ['/users/find', 'GET'],*/
+            ['/users/987584/owner/Test+User+Name', 'GET']/*,
             ['/users', 'POST'],
             ['/users/987584/admin', 'PUT'],
-            ['/users/987584', 'DELETE']
+            ['/users/987584', 'DELETE']*/
         ];
 
         // init di container

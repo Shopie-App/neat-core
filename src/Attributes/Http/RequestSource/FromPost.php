@@ -17,7 +17,7 @@ class FromPost
     /**
      * Gets object from http post.
      */
-    public function loadObject(string $key, Request $httpRequest): mixed
+    public function loadObject(string $key, Request $httpRequest): ?string
     {
         if ($this->name !== null) {
 

@@ -75,7 +75,7 @@ class RoutingMatch implements RoutingMatchInterface
     {
         // first part is controller name
         // if no value, send to index controller
-        if ($this->pathParts[0] == '') {
+        if (empty($this->pathParts) || $this->pathParts[0] == '') {
             
             $nsClass = 'IndexController';
         } else {
