@@ -8,6 +8,7 @@ use Neat\Attributes\Json\Json as AttributeJson;
 use ReflectionClass;
 use ReflectionProperty;
 use stdClass;
+use Traversable;
 
 class Json
 {
@@ -20,7 +21,7 @@ class Json
     {
         $json = [];
         
-        if (is_array($objectOrArray)) {
+        if ($objectOrArray instanceof Traversable) {
 
             foreach ($objectOrArray as $object) {
 
