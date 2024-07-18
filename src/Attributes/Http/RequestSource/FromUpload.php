@@ -27,15 +27,33 @@ class FromUpload
             return $collection;
         }
 
-        foreach ($files as $file) {
+        // array or single file
+        if (!is_array($files['name'])) {
 
             $collection->add(new UploadedFile(
-                $file[$this->name]['name'],
-                $file[$this->name]['full_path'],
-                $file[$this->name]['type'],
-                $file[$this->name]['tmp_name'],
-                $file[$this->name]['error'],
-                $file[$this->name]['size']
+                $files['name'],
+                $files['full_path'],
+                $files['type'],
+                $files['tmp_name'],
+                $files['error'],
+                $files['size']
+            ));
+
+            return $collection;
+        }
+
+        // handle array
+        $len = count($files['name']);
+
+        for ($i = 0; $i < $len; $i++) {
+
+            $collection->add(new UploadedFile(
+                $files['name'][$i],
+                $files['full_path'][$i],
+                $files['type'][$i],
+                $files['tmp_name'][$i],
+                $files['error'][$i],
+                $files['size'][$i]
             ));
         }
 
