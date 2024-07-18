@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Neat\Attributes\Json\Json;
+use Neat\Helpers\NeatCollection;
 use Neat\Http\Utils\Json as JsonMarshaler;
-use Neat\Tests\Stubs\BaseCollection;
 use PHPUnit\Framework\TestCase;
 
 final class JsonTest extends TestCase
@@ -114,7 +114,7 @@ class testSimpleObject
     }
 }
 
-class testSimpleObjectCollection extends BaseCollection
+class testSimpleObjectCollection extends NeatCollection
 {
     public function __construct()
     {

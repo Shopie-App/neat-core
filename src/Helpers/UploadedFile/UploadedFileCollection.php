@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Neat\Helpers\UploadedFile;
 
-use Neat\Tests\Stubs\BaseCollection;
+use Neat\Helpers\NeatCollection;
 
-class UploadedFileCollection extends BaseCollection
+class UploadedFileCollection extends NeatCollection
 {
     public function __construct()
     {

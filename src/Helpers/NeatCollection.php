@@ -1,7 +1,10 @@
 <?php
-namespace Neat\Tests\Stubs;
 
-abstract class BaseCollection implements \Iterator, \Countable
+declare(strict_types=1);
+
+namespace Neat\Helpers;
+
+abstract class NeatCollection implements \Iterator, \Countable
 {
     private $position;
 
