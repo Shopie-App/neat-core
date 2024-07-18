@@ -33,7 +33,7 @@ final class JsonTest extends TestCase
         $collection->add(new testSimpleObject());
         $collection->add(new testSimpleObject());
 
-        $arr = JsonMarshaler::marshal($collection->items());
+        $arr = JsonMarshaler::marshal($collection);
 
         $this->assertCount(3, $arr);
 

@@ -52,6 +52,11 @@ class Request implements RequestInterface
         return $this->post;
     }
 
+    public function files(string $key): ?array
+    {
+        return $_FILES[$key] ?? null;
+    }
+
     public function args(): stdClass
     {
         return $this->args;

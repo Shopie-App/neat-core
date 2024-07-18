@@ -7,6 +7,7 @@ namespace Neat\Http\Routing;
 use Neat\Attributes\Http\RequestSource\FromBody;
 use Neat\Attributes\Http\RequestSource\FromPost;
 use Neat\Attributes\Http\RequestSource\FromQuery;
+use Neat\Attributes\Http\RequestSource\FromUpload;
 use Neat\Contexts\AppContext;
 use Neat\Contracts\Http\RequestInterface;
 use Neat\Contracts\Http\Routing\RoutingActionInterface;
@@ -93,7 +94,7 @@ class RoutingAction implements RoutingActionInterface
             }
 
             // load object according to attribute
-            // currently supporting from query, from post and from body
+            // currently supporting from query, from post, from body and from file upload
             // $attrs[0]->getName() === FromQuery::class || $attrs[0]->getName() === FromPost::class
             if (in_array($attrs[0]->getName(), [FromQuery::class, FromPost::class])) {
 
@@ -104,6 +105,10 @@ class RoutingAction implements RoutingActionInterface
             } else if ($attrs[0]->getName() === FromBody::class) {
 
                 $params[] = $attrs[0]->newInstance()->loadObject($type->getName(), $this->httpRequest);
+
+            } else if ($attrs[0]->getName() === FromUpload::class) {
+
+                $params[] = $attrs[0]->newInstance()->loadObject($this->httpRequest);
             }
         }
 
