@@ -136,8 +136,8 @@ class Json
                 }
             }
 
-            // scalar type assign and go to next
-            if ($prop->getType()->isBuiltin()) {
+            // scalar types and stdClass assign and go to next
+            if ($prop->getType()->isBuiltin() || $prop->getType()->getName() === 'stdClass') {
 
                 if (isset($json->$key)) {
                     $prop->setValue($object, self::castValue($prop->getType()->getName(), $json->$key));
