@@ -7,6 +7,7 @@ namespace Neat\App;
 use Neat\Contexts\AppContext;
 use Neat\Contexts\HttpContext;
 use Neat\Contracts\Http\MiddlewareChainInterface;
+use Shopie\Quokka\Contracts\Contexts\HttpContextInterface;
 
 class App
 {
@@ -53,7 +54,7 @@ class App
     /**
      * HTTP context setter.
      */
-    public function setHttpContext(HttpContext $httpContext): void
+    public function setHttpContext(HttpContextInterface $httpContext): void
     {
         $this->httpContext = $httpContext;
     }

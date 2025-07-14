@@ -21,10 +21,14 @@ class RoutingMatch implements RoutingMatchInterface
     private ReflectionClass $reflector;
 
     private RoutingInfo $routeInfo;
+
+    private bool $isIndexController;
     
     public function __construct()
     {
         $this->pathParts = [];
+
+        $this->isIndexController = false;
     }
 
     public function setRouteInfo(RoutingInfo $routeInfo): void
@@ -47,8 +51,16 @@ class RoutingMatch implements RoutingMatchInterface
         // get controller name
         $this->routeInfo->setControllerName($this->extractControllerName());
 
-        // remove controller name from array
-        array_shift($this->pathParts);
+        // part form IndexController, remove controller name from array
+        // because if IndexController,  part is an argument
+        if (!$this->isIndexController) {
+            array_shift($this->pathParts);
+        }
+
+        // remove if empty
+        if (!empty($this->pathParts) && $this->pathParts[0] == '') {
+            array_shift($this->pathParts);
+        }
         
         // init controller introspector
         $this->reflector = new ReflectionClass($this->routeInfo->controllerName());
@@ -75,9 +87,12 @@ class RoutingMatch implements RoutingMatchInterface
     {
         // first part is controller name
         // if no value, send to index controller
-        if (empty($this->pathParts) || $this->pathParts[0] == '') {
+        if (empty($this->pathParts) || $this->pathParts[0] == '' || is_numeric($this->pathParts[0][0])) {
             
             $nsClass = 'IndexController';
+
+            $this->isIndexController = true;
+            
         } else {
 
             $nsClass = ucfirst(strtolower($this->pathParts[0])).'Controller';
@@ -89,6 +104,7 @@ class RoutingMatch implements RoutingMatchInterface
             if (str_ends_with($controller, '\\'.$nsClass)) {
                 
                 $nsClass = $controller;
+                break;
             }
         }
 
