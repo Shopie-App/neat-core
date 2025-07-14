@@ -22,8 +22,8 @@ class Request implements RequestInterface
         $this->loadHost();
         $this->loadUriPath();
         $this->loadMethod();
-        $this->get = !empty($_GET) ? (object) $_GET : null;
-        $this->post = !empty($_POST) ? (object) $_POST : null;
+        $this->get = (object) $_GET;
+        $this->post = (object) $_POST;
         $this->loadBody();
     }
 
