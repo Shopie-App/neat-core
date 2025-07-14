@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Neat\Contexts;
 
+use Neat\Contracts\Contexts\HttpContextInterface;
 use Neat\Contracts\Http\RequestInterface;
 use Neat\Contracts\Http\ResponseInterface;
 
-class HttpContext
+class HttpContext implements HttpContextInterface
 {
     public function __construct(
         private RequestInterface $request,
