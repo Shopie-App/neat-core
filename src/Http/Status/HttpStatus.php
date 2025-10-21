@@ -18,7 +18,7 @@ class HttpStatus
 /**
  * 200 OK
  */
-function OK(object|array $result = null): ActionResult
+function OK(object|array|null $result = null): ActionResult
 {
     return new JsonResult(200, $result);
 }
@@ -26,7 +26,7 @@ function OK(object|array $result = null): ActionResult
 /**
  * 201 Created
  */
-function Created(object|array $result = null): ActionResult
+function Created(object|array|null $result = null): ActionResult
 {
     return new JsonResult(201, $result);
 }
@@ -34,7 +34,7 @@ function Created(object|array $result = null): ActionResult
 /**
  * 202 Accepted
  */
-function Accepted(object|array $result = null): ActionResult
+function Accepted(object|array|null $result = null): ActionResult
 {
     return new JsonResult(202, $result);
 }
@@ -42,7 +42,7 @@ function Accepted(object|array $result = null): ActionResult
 /**
  * 204 No Content
  */
-function NoContent(object|array $result = null): ActionResult
+function NoContent(object|array|null $result = null): ActionResult
 {
     return new JsonResult(204, $result);
 }
@@ -50,7 +50,7 @@ function NoContent(object|array $result = null): ActionResult
 /**
  * 400 Bad Request
  */
-function BadRequest(object|array $result = null): ActionResult
+function BadRequest(object|array|null $result = null): ActionResult
 {
     return new JsonResult(400, $result);
 }
@@ -58,7 +58,7 @@ function BadRequest(object|array $result = null): ActionResult
 /**
  * 401 Unauthorized
  */
-function Unauthorized(object|array $result = null): ActionResult
+function Unauthorized(object|array|null $result = null): ActionResult
 {
     return new JsonResult(401, $result);
 }
@@ -66,7 +66,7 @@ function Unauthorized(object|array $result = null): ActionResult
 /**
  * 403 Forbidden
  */
-function Forbidden(object|array $result = null): ActionResult
+function Forbidden(object|array|null $result = null): ActionResult
 {
     return new JsonResult(403, $result);
 }
@@ -74,7 +74,7 @@ function Forbidden(object|array $result = null): ActionResult
 /**
  * 404 Not Found
  */
-function NotFound(object|array $result = null): ActionResult
+function NotFound(object|array|null $result = null): ActionResult
 {
     return new JsonResult(404, $result);
 }
@@ -82,7 +82,7 @@ function NotFound(object|array $result = null): ActionResult
 /**
  * 405 Method Not Allowed
  */
-function MethodNotAllowed(object|array $result = null): ActionResult
+function MethodNotAllowed(object|array|null $result = null): ActionResult
 {
     return new JsonResult(405, $result);
 }
@@ -90,7 +90,7 @@ function MethodNotAllowed(object|array $result = null): ActionResult
 /**
  * 409 Conflict
  */
-function Conflict(object|array $result = null): ActionResult
+function Conflict(object|array|null $result = null): ActionResult
 {
     return new JsonResult(409, $result);
 }
@@ -98,7 +98,7 @@ function Conflict(object|array $result = null): ActionResult
 /**
  * 415 Unsupported Media Type
  */
-function UnsupportedMediaType(object|array $result = null): ActionResult
+function UnsupportedMediaType(object|array|null $result = null): ActionResult
 {
     return new JsonResult(415, $result);
 }
@@ -106,7 +106,7 @@ function UnsupportedMediaType(object|array $result = null): ActionResult
 /**
  * 429 Too Many Requests
  */
-function TooManyRequests(object|array $result = null): ActionResult
+function TooManyRequests(object|array|null $result = null): ActionResult
 {
     return new JsonResult(429, $result);
 }
@@ -114,7 +114,7 @@ function TooManyRequests(object|array $result = null): ActionResult
 /**
  * 500 Internal Server Error
  */
-function InternalServerError(object|array $result = null): ActionResult
+function InternalServerError(object|array|null $result = null): ActionResult
 {
     return new JsonResult(500, $result);
 }
@@ -122,7 +122,7 @@ function InternalServerError(object|array $result = null): ActionResult
 /**
  * 501 Not Implemented
  */
-function NotImplemented(object|array $result = null): ActionResult
+function NotImplemented(object|array|null $result = null): ActionResult
 {
     return new JsonResult(501, $result);
 }
@@ -130,7 +130,7 @@ function NotImplemented(object|array $result = null): ActionResult
 /**
  * 503 Service Unavailable
  */
-function ServiceUnavailable(object|array $result = null): ActionResult
+function ServiceUnavailable(object|array|null $result = null): ActionResult
 {
     return new JsonResult(503, $result);
 }
