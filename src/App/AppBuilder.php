@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Neat\App;
 
 use Neat\App\App;
-use Neat\Authentication\AuthenticationBuilder;
 use Neat\Contexts\AppContextBuilder;
 use Neat\Contexts\HttpContextBuilder;
 use Neat\Contracts\AppBuilder\AppBuilderInterface;
-use Neat\Contracts\Authentication\AuthenticationOptionsInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
 use Neat\Http\MiddlewareChain;
 use Neat\Http\Routing\RoutingBuilder;
@@ -40,12 +38,6 @@ class AppBuilder implements AppBuilderInterface
      * @var bool
      */
     private bool $useRouting = false;
-
-    /**
-     * Add authentication service flag.
-     * @var bool
-     */
-    private bool $useAuthentication = false;
 
     /**
      * Collection of controllers for routing.
@@ -91,24 +83,12 @@ class AppBuilder implements AppBuilderInterface
         $this->useMiddleware = true;
     }
 
-    public function useAuthentication(): void
-    {
-        $this->useRouting();
-
-        $this->useAuthentication = true;
-    }
-
     public function addEndpoints(array $controllers): void
     {
         $this->useRouting();
 
         $this->controllers = $controllers;
     }
-
-    /*public function addAuthentication(string $provider, AuthenticationOptionsInterface $options): AuthenticationBuilder
-    {
-        return new AuthenticationBuilder($provider, $options);
-    }*/
 
     /**
      * @inheritdoc
@@ -127,7 +107,7 @@ class AppBuilder implements AppBuilderInterface
         // add pre routing middleware
         $this->addPreMiddlewares();
 
-        // add routing service and middleware
+        // add routing middleware
         $this->addRouting();
 
         // add post routing middleware
@@ -193,7 +173,7 @@ class AppBuilder implements AppBuilderInterface
     }
 
     /**
-     * Add middleware chain service.
+     * Adds routing service and middleware.
      */
     private function addRouting(): void
     {
@@ -215,12 +195,6 @@ class AppBuilder implements AppBuilderInterface
     {
         if (!$this->useMiddleware) {
             return;
-        }
-
-        // authentication
-        if ($this->useAuthentication) {
-
-            // add authentication middleware
         }
     }
 
