@@ -11,6 +11,7 @@ use Neat\Http\Routing\Routing;
 use Neat\Http\Routing\RoutingAction;
 use Neat\Http\Routing\RoutingMatch;
 use Neat\Http\Status\HttpStatus;
+use Neat\Tests\Doubles\FakeRequest;
 use Neat\Tests\Stubs\UsersController;
 use PHPUnit\Framework\TestCase;
 
@@ -21,9 +22,10 @@ final class RoutingTest extends TestCase
         new HttpStatus;
         
         // create request mock
-        $req = $this->createStub(Request::class);
-        $req->expects($this->any())->method('body')->willReturn(json_decode('{"id":"999","title":"Test Product Title","properties":{"id":"3","type_id":"3"}}'));
-        $req->expects($this->any())->method('get')->willReturn((object) ['num' => '5674']);
+        $req = new FakeRequest(
+            get: (object) ['num' => '5674'],
+            body: json_decode('{"id":"999","title":"Test Product Title","properties":{"id":"3","type_id":"3"}}')
+        );
 
         // routes to test
         $routes = [

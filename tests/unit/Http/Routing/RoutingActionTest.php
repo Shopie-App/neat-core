@@ -8,10 +8,10 @@ use Neat\Contexts\AppContext;
 use Neat\Helpers\UploadedFile\UploadedFile;
 use Neat\Helpers\UploadedFile\UploadedFileCollection;
 use Neat\Http\ActionResult\ActionResult;
-use Neat\Http\Request;
 use Neat\Http\Routing\RoutingAction;
 use Neat\Http\Routing\RoutingInfo;
 use Neat\Http\Status\HttpStatus;
+use Neat\Tests\Doubles\FakeRequest;
 use Neat\Tests\Stubs\UploadController;
 use Neat\Tests\Stubs\User;
 use Neat\Tests\Stubs\UsersController;
@@ -22,7 +22,7 @@ final class RoutingActionTest extends TestCase
     public function testRoutingAction(): void
     {
         // build a mock routing info object
-        $routeInfo =  $this->createConfiguredMock(RoutingInfo::class, [
+        $routeInfo =  $this->createConfiguredStub(RoutingInfo::class, [
             'route' => '/{param1}/owner/{param2}?queryInt=5674',
             'httpVerb' => 'GET',
             'controllerName' => 'Neat\\Tests\\Stubs\\UsersController',
@@ -38,8 +38,9 @@ final class RoutingActionTest extends TestCase
         ]);
 
         // build a mock http request object
-        $req = $this->createStub(Request::class);
-        $req->expects($this->any())->method('get')->willReturn((object) ['queryInt' => 5674]);
+        $req = new FakeRequest(
+            get: (object) ['queryInt' => 5674]
+        );
 
         // add global http status functions
         new HttpStatus;
@@ -86,7 +87,7 @@ final class RoutingActionTest extends TestCase
         $filesCollection->add($file);
 
         // build a mock routing info object
-        $routeInfo =  $this->createConfiguredMock(RoutingInfo::class, [
+        $routeInfo =  $this->createConfiguredStub(RoutingInfo::class, [
             'route' => '/',
             'httpVerb' => 'POST',
             'controllerName' => 'Neat\\Tests\\Stubs\\UploadController',
@@ -99,8 +100,7 @@ final class RoutingActionTest extends TestCase
         ]);
 
         // build a mock http request object
-        $req = $this->createStub(Request::class);
-        //$req->expects($this->any())->method('files')->willReturn(null);
+        $req = new FakeRequest((object) []);
 
         // add global http status functions
         new HttpStatus;

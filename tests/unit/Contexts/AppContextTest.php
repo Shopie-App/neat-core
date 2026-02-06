@@ -12,7 +12,7 @@ final class AppContextTest extends TestCase
 {
     public function testAppContext(): void
     {
-        $collection = $this->getMockForAbstractClass(ServiceCollectionInterface::class);
+        $collection = $this->createStub(ServiceCollectionInterface::class);
 
         // init injected services
         $service = new ServiceContainer($collection);
