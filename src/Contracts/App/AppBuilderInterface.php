@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neat\Contracts\AppBuilder;
-
-use Neat\App\App;
+namespace Neat\Contracts\App;
 
 /**
  * Application builder abstraction.
@@ -34,7 +32,7 @@ interface AppBuilderInterface
     /**
      * Build ensures components are added in the correct order.
      * 
-     * @return App Returns the application instance.
+     * @return AppInterface Returns the application instance.
      */
-    public function build(): App;
+    public function build(): AppInterface;
 }

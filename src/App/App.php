@@ -6,10 +6,11 @@ namespace Neat\App;
 
 use Neat\Contexts\AppContext;
 use Neat\Contexts\HttpContext;
+use Neat\Contracts\App\AppInterface;
 use Neat\Contracts\Contexts\HttpContextInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
 
-class App
+class App implements AppInterface
 {
     /**
      * Application context object.

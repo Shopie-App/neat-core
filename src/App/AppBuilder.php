@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Neat\App;
 
-use Neat\App\App;
 use Neat\Contexts\AppContextBuilder;
 use Neat\Contexts\HttpContextBuilder;
-use Neat\Contracts\AppBuilder\AppBuilderInterface;
+use Neat\Contracts\App\AppBuilderInterface;
+use Neat\Contracts\App\AppInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
 use Neat\Http\MiddlewareChain;
 use Neat\Http\Routing\RoutingBuilder;
@@ -53,9 +53,9 @@ class AppBuilder implements AppBuilderInterface
 
     /**
      * Application instance.
-     * @var App
+     * @var AppInterface
      */
-    private App $app;
+    private AppInterface $app;
 
     public function __construct()
     {
@@ -93,7 +93,7 @@ class AppBuilder implements AppBuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(): App
+    public function build(): AppInterface
     {
         // create app context
         $this->createAppContext();
@@ -147,6 +147,7 @@ class AppBuilder implements AppBuilderInterface
             $this->app->appContext()->provider()
         ))->getResult());
 
+        // Trigger autoloader to load the file containing global HTTP status functions
         new HttpStatus;
     }
 
