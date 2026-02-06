@@ -20,10 +20,10 @@
         }
     },
     "require": {
-        "shopie/di-container": "^1.0"
+        "shopie/di-container": "^2.0"
     },
     "require-dev": {
-        "firebase/php-jwt": "^6.8.1"
+        "firebase/php-jwt": "^7.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true
