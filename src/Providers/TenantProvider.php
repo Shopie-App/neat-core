@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Neat\Providers;
 
-use Neat\Contracts\ResettableInterface;
 use RuntimeException;
+use Shopie\DiContainer\Contracts\ResettableInterface;
 
 class TenantProvider implements ResettableInterface
 {
