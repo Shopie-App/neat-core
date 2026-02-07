@@ -249,9 +249,9 @@ class AppBuilder implements AppBuilderInterface
 
         $this->middlewareChain->add(ClaimsTransformationMiddleware::class);
 
-        $this->app->service->addScoped(JwtTokenParser::class);
+        $this->app->appContext()->service()->addScoped(JwtTokenParser::class);
 
-        $this->app->service->addScoped(ClaimsPrincipalInterface::class, ClaimsPrincipal::class);
+        $this->app->appContext()->service()->addScoped(ClaimsPrincipalInterface::class, ClaimsPrincipal::class);
     }
 
     /**
@@ -265,7 +265,7 @@ class AppBuilder implements AppBuilderInterface
 
         $this->middlewareChain->add(TenancyMiddleware::class);
 
-        $this->app->service->addScoped(TenantProvider::class);
+        $this->app->appContext()->service()->addScoped(TenantProvider::class);
     }
 
     /**
