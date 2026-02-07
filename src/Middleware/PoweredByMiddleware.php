@@ -9,7 +9,7 @@ use Neat\Contexts\HttpContext;
 use Neat\Contracts\Http\MiddlewareInterface;
 use Neat\Contracts\Http\ResponseInterface;
 
-final class PoweredBy implements MiddlewareInterface
+final class PoweredByMiddleware implements MiddlewareInterface
 {
     public function handle(HttpContext $context, Closure $next): ResponseInterface
     {
