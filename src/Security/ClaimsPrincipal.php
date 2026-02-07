@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Neat\Security;
 
 use Neat\Contracts\Security\ClaimsPrincipalInterface;
+use Shopie\DiContainer\Contracts\ResettableInterface;
 
-class ClaimsPrincipal implements ClaimsPrincipalInterface
+class ClaimsPrincipal implements ClaimsPrincipalInterface, ResettableInterface
 {
     public function __construct(private array $claims = [])
     {
@@ -43,5 +44,10 @@ class ClaimsPrincipal implements ClaimsPrincipalInterface
     public function getClaim(string $type): mixed
     {
         return $this->claims[$type] ?? null;
+    }
+
+    public function reset(): void
+    {
+        $this->claims = [];
     }
 }
