@@ -13,11 +13,13 @@ class FakeRequest extends Request
 
     public stdClass $body;
 
-    public function __construct($get, $body = new stdClass)
-    {
-        $this->get = $get;
+    public array $headers = [];
 
-        $this->body = $body;
+    public function __construct($get = null, $body = null)
+    {
+        $this->get = $get ?? new stdClass();
+
+        $this->body = $body ?? new stdClass();
     }
 
     public function get(): stdClass
@@ -28,5 +30,17 @@ class FakeRequest extends Request
     public function body(): stdClass
     {
         return $this->body;
+    }
+
+    public function withHeader(string $name, string $value): self
+    {
+        $this->headers[$name] = $value;
+
+        return $this;
+    }
+
+    public function header(string $name): ?string
+    {
+        return $this->headers[$name] ?? null;
     }
 }
