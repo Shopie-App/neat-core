@@ -21,11 +21,6 @@ interface AppInterface
     public function setAppContext(AppContext $appContext): void;
 
     /**
-     * HTTP context setter.
-     */
-    public function setHttpContext(HttpContextInterface $httpContext): void;
-
-    /**
      * Middleware service setter.
      */
     public function setMiddlewareChain(MiddlewareChainInterface $middlewareChain): void;
@@ -43,10 +38,10 @@ interface AppInterface
     /**
      * Outputs application action result.
      */
-    public function output(): void;
+    public function output(HttpContextInterface $context): void;
 
     /**
-     * Shutdowns the application.
+     * Resets application's state.
      */
-    public function shutdown(): void;
+    public function resetState(): void;
 }

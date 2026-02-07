@@ -4,17 +4,24 @@ declare(strict_types=1);
 
 namespace Neat\App;
 
+use Neat\Auth\JwtTokenParser;
 use Neat\Contexts\AppContextBuilder;
 use Neat\Contexts\HttpContextBuilder;
 use Neat\Contracts\App\AppBuilderInterface;
 use Neat\Contracts\App\AppInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
+use Neat\Contracts\Security\ClaimsPrincipalInterface;
 use Neat\Http\MiddlewareChain;
 use Neat\Http\Routing\RoutingBuilder;
 use Neat\Http\Status\HttpStatus;
-use Neat\Middleware\PoweredBy;
+use Neat\Middleware\AuthorizationMiddleware;
+use Neat\Middleware\ClaimsTransformationMiddleware;
+use Neat\Middleware\PoweredByMiddleware;
 use Neat\Middleware\Routing;
-use Neat\Middleware\Security;
+use Neat\Middleware\SecurityHeadersMiddleware;
+use Neat\Middleware\TenancyMiddleware;
+use Neat\Providers\TenantProvider;
+use Neat\Security\ClaimsPrincipal;
 
 /**
  * Application concrete builder.
@@ -38,6 +45,24 @@ class AppBuilder implements AppBuilderInterface
      * @var bool
      */
     private bool $useRouting = false;
+
+    /**
+     * Add JWT claims transformation flag.
+     * @var bool
+     */
+    private bool $useClaimsTransformation = false;
+
+    /**
+     * Add tenancy support flag.
+     * @var bool
+     */
+    private bool $useTenancy = false;
+
+    /**
+     * Add authorization flag.
+     * @var bool
+     */
+    private bool $useAuthorization = false;
 
     /**
      * Collection of controllers for routing.
@@ -83,6 +108,21 @@ class AppBuilder implements AppBuilderInterface
         $this->useMiddleware = true;
     }
 
+    public function useClaimsTransformation(): void
+    {
+        $this->useClaimsTransformation = true;
+    }
+
+    public function useTenancy(): void
+    {
+        $this->useTenancy = true;
+    }
+
+    public function useAuthorization(): void
+    {
+        $this->useAuthorization = true;
+    }
+
     public function addEndpoints(array $controllers): void
     {
         $this->useRouting();
@@ -109,6 +149,15 @@ class AppBuilder implements AppBuilderInterface
 
         // add routing middleware
         $this->addRouting();
+
+        // add jwt claims transformation middleware
+        $this->addClaimsTransformation();
+
+        // add tenancy middleware
+        $this->addTenancy();
+
+        // add authorization middleware
+        $this->addAuthorization();
 
         // add post routing middleware
         $this->addPostMiddlewares();
@@ -142,10 +191,10 @@ class AppBuilder implements AppBuilderInterface
             return;
         }
 
-        $this->app->setHttpContext((new HttpContextBuilder(
+        (new HttpContextBuilder(
             $this->app->appContext()->service(),
             $this->app->appContext()->provider()
-        ))->getResult());
+        ))->getResult();
 
         // Trigger autoloader to load the file containing global HTTP status functions
         new HttpStatus;
@@ -165,9 +214,9 @@ class AppBuilder implements AppBuilderInterface
         $this->middlewareChain = $this->app->appContext()->provider()->getService(MiddlewareChainInterface::class);
 
         // add common middlewares
-        $this->middlewareChain->add(Security::class);
+        $this->middlewareChain->add(SecurityHeadersMiddleware::class);
 
-        $this->middlewareChain->add(PoweredBy::class);
+        $this->middlewareChain->add(PoweredByMiddleware::class);
 
         // set to application
         $this->app->setMiddlewareChain($this->middlewareChain);
@@ -187,6 +236,48 @@ class AppBuilder implements AppBuilderInterface
             $this->app->appContext()->provider(),
             $this->controllers
         ))->getResult());
+    }
+
+    /**
+     * Adds claims transformation service and middleware.
+     */
+    private function addClaimsTransformation(): void
+    {
+        if (!$this->useClaimsTransformation || !$this->useRouting) {
+            return;
+        }
+
+        $this->middlewareChain->add(ClaimsTransformationMiddleware::class);
+
+        $this->app->service->addScoped(JwtTokenParser::class);
+
+        $this->app->service->addScoped(ClaimsPrincipalInterface::class, ClaimsPrincipal::class);
+    }
+
+    /**
+     * Adds tenancy provider and middleware.
+     */
+    private function addTenancy(): void
+    {
+        if (!$this->useTenancy || !$this->useClaimsTransformation) {
+            return;
+        }
+
+        $this->middlewareChain->add(TenancyMiddleware::class);
+
+        $this->app->service->addScoped(TenantProvider::class);
+    }
+
+    /**
+     * Adds authorization and middleware.
+     */
+    private function addAuthorization(): void
+    {
+        if (!$this->useAuthorization || !$this->useRouting) {
+            return;
+        }
+
+        $this->middlewareChain->add(AuthorizationMiddleware::class);
     }
 
     /**

@@ -26,7 +26,7 @@ class HttpContextBuilder implements HttpContextBuilderInterface
 
         $this->service->addScoped(ResponseInterface::class, Response::class);
 
-        $this->service->addScoped(HttpContext::class);
+        $this->service->addScoped(HttpContext::class, null);
 
         return $this->provider->getService(HttpContext::class);
     }

@@ -8,6 +8,8 @@ use Neat\Contexts\AppContext;
 use Neat\Contexts\HttpContext;
 use Neat\Contracts\App\AppInterface;
 use Neat\Contracts\Contexts\HttpContextInterface;
+use Neat\Contracts\Http\RequestInterface;
+use Neat\Contracts\Http\ResponseInterface;
 use Neat\Contracts\Http\MiddlewareChainInterface;
 
 class App implements AppInterface
@@ -18,11 +20,7 @@ class App implements AppInterface
      */
     private AppContext $appContext;
 
-    /**
-     * Http req/res context object.
-     * @var HttpContext
-     */
-    private ?HttpContext $httpContext = null;
+    private int $requestCount = 0;
 
     /**
      * Chain of responsibility abstraction.
@@ -53,14 +51,6 @@ class App implements AppInterface
     }
 
     /**
-     * HTTP context setter.
-     */
-    public function setHttpContext(HttpContextInterface $httpContext): void
-    {
-        $this->httpContext = $httpContext;
-    }
-
-    /**
      * Middleware service setter.
      */
     public function setMiddlewareChain(MiddlewareChainInterface $middlewareChain): void
@@ -82,36 +72,52 @@ class App implements AppInterface
     /**
      * Runs the application.
      */
-    public function run(): void
+    public function run(?HttpContext $context = null): void
     {
-        // process middleware pipeline
-        if ($this->middlewareChain != null) {
+        // Use passed context or resolve from container (FPM fallback)
+        $httpContext = $context ?? $this->appContext->provider()->getService(HttpContext::class);
 
-            $this->middlewareChain->process($this->httpContext);
+        // If running in a worker loop (context passed), sync the container with the fresh objects
+        if ($context !== null) {
+            $this->appContext->service()->setObject(HttpContext::class, $context);
+            $this->appContext->service()->setObject(RequestInterface::class, $context->request());
+            $this->appContext->service()->setObject(ResponseInterface::class, $context->response());
         }
 
-        // output result
-        $this->output();
+        try {
+            // process middleware pipeline
+            if ($this->middlewareChain !== null) {
 
-        // shutdown
-        $this->shutdown();
+                $this->middlewareChain->process($httpContext);
+            }
+
+            // output result
+            $this->output($httpContext);
+
+        } finally {
+            $this->resetState();
+
+            // optional
+            // Only force GC every 100 requests to save CPU cycles
+            if (gc_enabled() && ++$this->requestCount % 100 === 0) {
+                gc_collect_cycles();
+            }
+        }
     }
 
     /**
      * Outputs application action result.
      */
-    public function output(): void
+    public function output(HttpContextInterface $context): void
     {
-        if ($this->httpContext != null) {
-
-            $this->httpContext->response()->output();
-        }
+        $context->response()->output();
     }
 
     /**
-     * Shutdowns the application.
+     * Resets application's state.
      */
-    public function shutdown(): void
+    public function resetState(): void
     {
+        $this->appContext->service()->resetAll();
     }
 }
