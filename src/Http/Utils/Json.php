@@ -53,7 +53,7 @@ class Json
     {
         $reflector = new ReflectionClass($object);
 
-        $props = $reflector->getProperties(ReflectionProperty::IS_PRIVATE);
+        $props = $reflector->getProperties();
 
         foreach ($props as $prop) {
 
@@ -106,9 +106,22 @@ class Json
     {
         $reflector = new ReflectionClass($object);
 
-        $props = $reflector->getProperties(ReflectionProperty::IS_PRIVATE);
+        foreach ($reflector->getProperties() as $prop) {
 
-        foreach ($props as $prop) {
+            // check if it's a traditional private property
+            $isPrivate = $prop->isPrivate();
+            
+            // check if it's a public/protected property with a private(set)
+            $isPrivateSet = false;
+            
+            if (method_exists($prop, 'isPrivateSet')) {
+                $isPrivateSet = $prop->isPrivateSet();
+            }
+
+            // skip public-set or protected-set
+            if (!$isPrivate && !$isPrivateSet) {
+                continue;
+            }
 
             // get json attributes
             $attrs = $prop->getAttributes(AttributeJson::class);
@@ -164,20 +177,19 @@ class Json
     /**
      * Cast a value to correct type.
      */
-    private static function castValue($type, $value): mixed
+    private static function castValue(?string $type, mixed $value): mixed
     {
-        $castedValue = null;
-
-        switch ($type) {
-            case 'bool': $castedValue = (bool) $value;
-                break;
-            case 'int': $castedValue = (int) $value;
-                break;
-            case 'float': $castedValue = (float) $value;
-                break;
-            default: $castedValue = $value;
+        if ($value === null) {
+            return null;
         }
 
-        return $castedValue;
+        return match ($type) {
+            'int'    => is_numeric($value) ? (int) $value : $value,
+            'float'  => is_numeric($value) ? (float) $value : $value,
+            'bool'   => is_bool($value) ? $value : filter_var($value, FILTER_VALIDATE_BOOLEAN),
+            'string' => (string) $value,
+            'array'  => (array) $value,
+            default  => $value
+        };
     }
 }

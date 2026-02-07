@@ -72,7 +72,7 @@ final class JsonTest extends TestCase
 
         JsonMarshaler::unMarshal($json, $object);
 
-        $this->assertSame(101, $object->testId());
+        $this->assertSame(101, $object->testId);
         $this->assertSame('My test title', $object->testTitle());
         $this->assertSame('My name', $object->testName());
     }
@@ -81,7 +81,7 @@ final class JsonTest extends TestCase
 class testSimpleObject
 {
     #[Json('id')]
-    private int $testId;
+    public private(set) int $testId;
 
     #[Json('title')]
     private string $testTitle;
@@ -96,11 +96,6 @@ class testSimpleObject
         $this->testId = 1;
         $this->testTitle = 'This is a test title';
         $this->test_name = 'My name';
-    }
-
-    public function testId(): int
-    {
-        return $this->testId;
     }
 
     public function testTitle(): string
