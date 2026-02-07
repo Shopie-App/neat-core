@@ -23,20 +23,29 @@ While other frameworks struggle with memory bloat and state pollution in long-ru
 * **Reference Recycling:** Automatic isolation between requests. No manual `reset()` methods, no data leakage.
 * **Microservice Ready:** Lightweight footprint designed for distributed architectures and containerized deployments (Docker/Kubernetes).
 * **Dual-Mode Engine:** Seamlessly switches between FrankenPHP workers and traditional PHP-FPM for ultimate flexibility.
-* **Lazy-Loaded DI:** Auto-wired dependency injection supporting Scoped and Ephemeral lifecycles using PHP 8.4 Reflection.
+* **Fluent AppBuilder:** Simple, expressive setup for HTTP, Middleware, and Routing components.
 
 ## 🚀 Quick Start (FrankenPHP / Microservice)
 
 ```php
-$app = new \Neat\App();
+use Neat\App\AppBuilder;
+use Neat\Contexts\HttpContext;
+use Neat\Http\Request;
+use Neat\Http\Response;
+
+// Build the kernel once
+$app = (new AppBuilder())
+    ->useHttp()
+    ->useMiddleware()
+    ->build();
 
 // The Worker Handler
 $handler = static function () use ($app) {
     // 1. Spawn fresh Request/Response instances for THIS request
-    $builder = new \Neat\Contexts\HttpContextBuilder($app->getContainer());
+    $context = new HttpContext(new Request(), new Response());
     
     // 2. Run the kernel. Reference Recycling handles the cleanup via 'finally'.
-    $app->run($builder->getResult());
+    $app->run($context);
 };
 
 // Start the high-performance loop
