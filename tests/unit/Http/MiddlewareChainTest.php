@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Closure;
 use Neat\Contexts\HttpContext;
 use Neat\Contracts\Http\MiddlewareInterface;
 use Neat\Contracts\Http\ResponseInterface;
