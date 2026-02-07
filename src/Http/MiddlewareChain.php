@@ -6,33 +6,32 @@ namespace Neat\Http;
 
 use Neat\Contexts\HttpContext;
 use Neat\Contracts\Http\MiddlewareChainInterface;
+use Neat\Contracts\Http\ResponseInterface;
 
 class MiddlewareChain implements MiddlewareChainInterface
 {
-    public function __construct(private \SplQueue $chain = new \SplQueue())
-    {
-    }
+    private array $chain = [];
 
     public function add(string $middleware, ...$params): void
     {
-        $this->chain->enqueue([$middleware, $params]);
+        $this->chain[] = [$middleware, $params];
     }
 
-    public function process(HttpContext $context): Response
+    public function process(HttpContext $context): ResponseInterface
     {
-        if ($this->chain->isEmpty()) {
-            return $context->response();
-        }
-        
-        if (($mware = $this->getNext()) === null) {
-            return $context->response();
-        }
-
-        return (new $mware[0](...$mware[1]))->handle($context, $this->process(...));
+        return $this->next($context, 0);
     }
 
-    private function getNext(): array
+    private function next(HttpContext $context, int $index): ResponseInterface
     {
-        return $this->chain->dequeue();
+        if (!isset($this->chain[$index])) {
+            return $context->response();
+        }
+
+        [$middleware, $params] = $this->chain[$index];
+
+        $next = fn (HttpContext $ctx) => $this->next($ctx, $index + 1);
+
+        return (new $middleware(...$params))->handle($context, $next);
     }
 }
