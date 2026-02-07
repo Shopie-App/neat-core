@@ -9,18 +9,22 @@ use Neat\Contexts\HttpContext;
 use Neat\Contracts\Http\MiddlewareInterface;
 use Neat\Contracts\Http\ResponseInterface;
 use Neat\Contracts\Security\ClaimsPrincipalInterface;
+use Neat\Providers\TenantProvider;
 
 final class TenancyMiddleware implements MiddlewareInterface
 {
-    public function __construct(private ClaimsPrincipalInterface $user) {}
+    public function __construct(
+        private ClaimsPrincipalInterface $user,
+        private TenantProvider $tenantProvider
+    ) {}
 
     public function handle(HttpContext $context, Closure $next): ResponseInterface
     {
-        if ($this->user->hasClaim('tid')) {
-            $tenantId = $this->user->getClaim('tid');
+        if ($this->user->hasClaim('ten')) {
+
+            $tenantId = (string) $this->user->getClaim('ten');
             
-            // Example: Set the tenant ID on the context or configure a DB service
-            // $context->setTenantId($tenantId);
+            $this->tenantProvider->set($tenantId);
         }
 
         // next middleware

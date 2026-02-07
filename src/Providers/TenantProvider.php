@@ -29,7 +29,7 @@ class TenantProvider implements ResettableInterface
      * Retrieves the tenant ID.
      * Throws an exception if accessed before identification.
      */
-    public function get(): string
+    public function id(): string
     {
         return $this->tenantId ?? throw new RuntimeException("Tenant context not identified.");
     }
@@ -37,7 +37,7 @@ class TenantProvider implements ResettableInterface
     /**
      * Checks if a tenant context exists.
      */
-    public function hasTenant(): bool
+    public function has(): bool
     {
         return $this->tenantId !== null;
     }
