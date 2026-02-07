@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Closure;
 use Neat\Contexts\HttpContext;
 use Neat\Contracts\Http\MiddlewareInterface;
 use Neat\Contracts\Http\ResponseInterface;
@@ -29,7 +30,7 @@ final class MiddlewareChainTest extends TestCase
         $this->assertSame($response, $result1);
         $this->assertSame(1, SpyMiddleware::$runCount, 'Middleware should run once on first call');
 
-        // Run 2 (This verifies the chain was cloned and not consumed)
+        // Run 2 (This verifies the chain was not consumed)
         $result2 = $chain->process($context);
         $this->assertSame($response, $result2);
         $this->assertSame(2, SpyMiddleware::$runCount, 'Middleware should run again on second call');
