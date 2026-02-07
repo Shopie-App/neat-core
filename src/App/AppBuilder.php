@@ -247,11 +247,16 @@ class AppBuilder implements AppBuilderInterface
             return;
         }
 
-        $this->middlewareChain->add(ClaimsTransformationMiddleware::class);
-
+        // TODO: better encapsulate it in a builder
         $this->app->appContext()->service()->addScoped(JwtTokenParser::class);
 
         $this->app->appContext()->service()->addScoped(ClaimsPrincipalInterface::class, ClaimsPrincipal::class);
+
+        $this->middlewareChain->add(
+            ClaimsTransformationMiddleware::class,
+            $this->app->appContext()->provider()->getService(JwtTokenParser::class),
+            $this->app->appContext()->provider()->getService(ClaimsPrincipalInterface::class)
+        );
     }
 
     /**
@@ -263,9 +268,14 @@ class AppBuilder implements AppBuilderInterface
             return;
         }
 
-        $this->middlewareChain->add(TenancyMiddleware::class);
-
+        // TODO: better encapsulate it in a builder
         $this->app->appContext()->service()->addScoped(TenantProvider::class);
+
+        $this->middlewareChain->add(
+            TenancyMiddleware::class,
+            $this->app->appContext()->provider()->getService(ClaimsPrincipalInterface::class),
+            $this->app->appContext()->provider()->getService(TenantProvider::class)
+        );
     }
 
     /**
@@ -277,7 +287,10 @@ class AppBuilder implements AppBuilderInterface
             return;
         }
 
-        $this->middlewareChain->add(AuthorizationMiddleware::class);
+        $this->middlewareChain->add(
+            AuthorizationMiddleware::class,
+            $this->app->appContext()->provider()->getService(ClaimsPrincipalInterface::class)
+        );
     }
 
     /**
