@@ -15,14 +15,15 @@ final class TenancyMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private ClaimsPrincipalInterface $user,
-        private TenantProvider $tenantProvider
+        private TenantProvider $tenantProvider,
+        private string $tenantClaimName
     ) {}
 
     public function handle(HttpContext $context, Closure $next): ResponseInterface
     {
-        if ($this->user->hasClaim('ten')) {
+        if ($this->user->hasClaim($this->tenantClaimName)) {
 
-            $tenantId = (string) $this->user->getClaim('ten');
+            $tenantId = (string) $this->user->getClaim($this->tenantClaimName);
             
             $this->tenantProvider->set($tenantId);
         }

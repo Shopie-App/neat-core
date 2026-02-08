@@ -18,10 +18,12 @@ final class TenancyMiddlewareTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $provider = $this->createMock(TenantProvider::class);
 
-        $principal->method('hasClaim')->with('ten')->willReturn(true);
+        $claimName = 'org_id';
+
+        $principal->expects($this->once())->method('hasClaim')->with($claimName)->willReturn(true);
         $principal->expects($this->once())
             ->method('getClaim')
-            ->with('ten')
+            ->with($claimName)
             ->willReturn(123);
 
         $provider->expects($this->once())
@@ -30,7 +32,7 @@ final class TenancyMiddlewareTest extends TestCase
 
         $next = fn (HttpContext $ctx) => $response;
 
-        $middleware = new TenancyMiddleware($principal, $provider);
+        $middleware = new TenancyMiddleware($principal, $provider, $claimName);
         $result = $middleware->handle($context, $next);
 
         $this->assertSame($response, $result);
@@ -43,7 +45,9 @@ final class TenancyMiddlewareTest extends TestCase
         $response = $this->createStub(ResponseInterface::class);
         $provider = $this->createMock(TenantProvider::class);
 
-        $principal->method('hasClaim')->with('ten')->willReturn(false);
+        $claimName = 'org_id';
+
+        $principal->expects($this->once())->method('hasClaim')->with($claimName)->willReturn(false);
         $principal->expects($this->never())
             ->method('getClaim');
 
@@ -51,7 +55,7 @@ final class TenancyMiddlewareTest extends TestCase
 
         $next = fn (HttpContext $ctx) => $response;
 
-        $middleware = new TenancyMiddleware($principal, $provider);
+        $middleware = new TenancyMiddleware($principal, $provider, $claimName);
         $result = $middleware->handle($context, $next);
 
         $this->assertSame($response, $result);

@@ -59,6 +59,12 @@ class AppBuilder implements AppBuilderInterface
     private bool $useTenancy = false;
 
     /**
+     * The claim name to use for tenancy.
+     * @var string
+     */
+    private string $tenantClaimName;
+
+    /**
      * Add authorization flag.
      * @var bool
      */
@@ -113,9 +119,11 @@ class AppBuilder implements AppBuilderInterface
         $this->useClaimsTransformation = true;
     }
 
-    public function useTenancy(): void
+    public function useTenancy(string $claimName): void
     {
         $this->useTenancy = true;
+        
+        $this->tenantClaimName = $claimName;
     }
 
     public function useAuthorization(): void
@@ -274,7 +282,8 @@ class AppBuilder implements AppBuilderInterface
         $this->middlewareChain->add(
             TenancyMiddleware::class,
             $this->app->appContext()->provider()->getService(ClaimsPrincipalInterface::class),
-            $this->app->appContext()->provider()->getService(TenantProvider::class)
+            $this->app->appContext()->provider()->getService(TenantProvider::class),
+            $this->tenantClaimName
         );
     }
 
