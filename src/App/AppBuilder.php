@@ -155,9 +155,6 @@ class AppBuilder implements AppBuilderInterface
         // add pre routing middleware
         $this->addPreMiddlewares();
 
-        // add routing middleware
-        $this->addRouting();
-
         // add jwt claims transformation middleware
         $this->addClaimsTransformation();
 
@@ -166,6 +163,9 @@ class AppBuilder implements AppBuilderInterface
 
         // add authorization middleware
         $this->addAuthorization();
+
+        // add routing middleware
+        $this->addRouting();
 
         // add post routing middleware
         $this->addPostMiddlewares();
