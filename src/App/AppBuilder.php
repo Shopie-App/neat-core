@@ -13,7 +13,6 @@ use Neat\Contracts\Http\MiddlewareChainInterface;
 use Neat\Contracts\Security\ClaimsPrincipalInterface;
 use Neat\Http\MiddlewareChain;
 use Neat\Http\Routing\RoutingBuilder;
-use Neat\Http\Status\HttpStatus;
 use Neat\Middleware\AuthorizationMiddleware;
 use Neat\Middleware\ClaimsTransformationMiddleware;
 use Neat\Middleware\PoweredByMiddleware;
@@ -203,9 +202,6 @@ class AppBuilder implements AppBuilderInterface
             $this->app->appContext()->service(),
             $this->app->appContext()->provider()
         ))->getResult();
-
-        // Trigger autoloader to load the file containing global HTTP status functions
-        new HttpStatus;
     }
 
     /**
