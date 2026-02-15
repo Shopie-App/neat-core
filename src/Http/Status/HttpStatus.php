@@ -2,135 +2,155 @@
 
 declare(strict_types=1);
 
-namespace Neat\Http\Status;
-
 use Neat\Http\ActionResult\ActionResult;
 use Neat\Http\ActionResult\JsonResult;
 
-/**
- * Composer file autoloading includes it on evey request, using a 
- * dummy class, these functions are loaded on demand.
- */
-class HttpStatus
-{
+if (!function_exists('OK')) {
+    /**
+     * 200 OK
+     */
+    function OK(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(200, $result);
+    }
 }
 
-/**
- * 200 OK
- */
-function OK(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(200, $result);
+if (!function_exists('Created')) {
+    /**
+     * 201 Created
+     */
+    function Created(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(201, $result);
+    }
 }
 
-/**
- * 201 Created
- */
-function Created(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(201, $result);
+if (!function_exists('Accepted')) {
+    /**
+     * 202 Accepted
+     */
+    function Accepted(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(202, $result);
+    }
 }
 
-/**
- * 202 Accepted
- */
-function Accepted(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(202, $result);
+if (!function_exists('NoContent')) {
+    /**
+     * 204 No Content
+     */
+    function NoContent(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(204, $result);
+    }
 }
 
-/**
- * 204 No Content
- */
-function NoContent(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(204, $result);
+if (!function_exists('BadRequest')) {
+    /**
+     * 400 Bad Request
+     */
+    function BadRequest(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(400, $result);
+    }
 }
 
-/**
- * 400 Bad Request
- */
-function BadRequest(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(400, $result);
+if (!function_exists('Unauthorized')) {
+    /**
+     * 401 Unauthorized
+     */
+    function Unauthorized(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(401, $result);
+    }
 }
 
-/**
- * 401 Unauthorized
- */
-function Unauthorized(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(401, $result);
+if (!function_exists('Forbidden')) {
+    /**
+     * 403 Forbidden
+     */
+    function Forbidden(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(403, $result);
+    }
 }
 
-/**
- * 403 Forbidden
- */
-function Forbidden(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(403, $result);
+if (!function_exists('NotFound')) {
+    /**
+     * 404 Not Found
+     */
+    function NotFound(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(404, $result);
+    }
 }
 
-/**
- * 404 Not Found
- */
-function NotFound(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(404, $result);
+if (!function_exists('MethodNotAllowed')) {
+    /**
+     * 405 Method Not Allowed
+     */
+    function MethodNotAllowed(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(405, $result);
+    }
 }
 
-/**
- * 405 Method Not Allowed
- */
-function MethodNotAllowed(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(405, $result);
+if (!function_exists('Conflict')) {
+    /**
+     * 409 Conflict
+     */
+    function Conflict(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(409, $result);
+    }
 }
 
-/**
- * 409 Conflict
- */
-function Conflict(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(409, $result);
+if (!function_exists('UnsupportedMediaType')) {
+    /**
+     * 415 Unsupported Media Type
+     */
+    function UnsupportedMediaType(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(415, $result);
+    }
 }
 
-/**
- * 415 Unsupported Media Type
- */
-function UnsupportedMediaType(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(415, $result);
+if (!function_exists('TooManyRequests')) {
+    /**
+     * 429 Too Many Requests
+     */
+    function TooManyRequests(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(429, $result);
+    }
 }
 
-/**
- * 429 Too Many Requests
- */
-function TooManyRequests(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(429, $result);
+if (!function_exists('InternalServerError')) {
+    /**
+     * 500 Internal Server Error
+     */
+    function InternalServerError(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(500, $result);
+    }
 }
 
-/**
- * 500 Internal Server Error
- */
-function InternalServerError(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(500, $result);
+if (!function_exists('NotImplemented')) {
+    /**
+     * 501 Not Implemented
+     */
+    function NotImplemented(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(501, $result);
+    }
 }
 
-/**
- * 501 Not Implemented
- */
-function NotImplemented(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(501, $result);
-}
-
-/**
- * 503 Service Unavailable
- */
-function ServiceUnavailable(object|array|null $result = null): ActionResult
-{
-    return new JsonResult(503, $result);
+if (!function_exists('ServiceUnavailable')) {
+    /**
+     * 503 Service Unavailable
+     */
+    function ServiceUnavailable(object|array|null $result = null): ActionResult
+    {
+        return new JsonResult(503, $result);
+    }
 }

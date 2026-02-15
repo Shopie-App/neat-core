@@ -12,7 +12,10 @@
     "autoload": {
         "psr-4": {
             "Neat\\": "src/"
-        }
+        },
+        "files": [
+            "src/Http/Status/HttpStatus.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
