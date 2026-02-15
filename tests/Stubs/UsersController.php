@@ -10,11 +10,6 @@ use Neat\Attributes\Http\RequestSource\FromQuery;
 use Neat\Http\ActionResult\ActionResult;
 use Neat\Http\Utils\Json;
 
-use function Neat\Http\Status\BadRequest;
-use function Neat\Http\Status\NotFound;
-use function Neat\Http\Status\OK;
-use function Neat\Http\Status\Unauthorized;
-
 class UsersController
 {
     public function __construct()

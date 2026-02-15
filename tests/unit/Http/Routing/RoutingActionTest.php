@@ -10,7 +10,6 @@ use Neat\Helpers\UploadedFile\UploadedFileCollection;
 use Neat\Http\ActionResult\ActionResult;
 use Neat\Http\Routing\RoutingAction;
 use Neat\Http\Routing\RoutingInfo;
-use Neat\Http\Status\HttpStatus;
 use Neat\Tests\Doubles\FakeRequest;
 use Neat\Tests\Stubs\UploadController;
 use Neat\Tests\Stubs\User;
@@ -41,9 +40,6 @@ final class RoutingActionTest extends TestCase
         $req = new FakeRequest(
             get: (object) ['queryInt' => 5674]
         );
-
-        // add global http status functions
-        new HttpStatus;
 
         // build a service container mock object
         $service = new ServiceContainer(new ServiceCollection());
@@ -101,9 +97,6 @@ final class RoutingActionTest extends TestCase
 
         // build a mock http request object
         $req = new FakeRequest((object) []);
-
-        // add global http status functions
-        new HttpStatus;
 
         // build a service container mock object
         $service = new ServiceContainer(new ServiceCollection());

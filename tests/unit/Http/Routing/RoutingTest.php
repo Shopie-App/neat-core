@@ -6,11 +6,9 @@ use Shopie\DiContainer\ServiceCollection;
 use Shopie\DiContainer\ServiceContainer;
 use Neat\Contexts\AppContext;
 use Neat\Http\ActionResult\ActionResult;
-use Neat\Http\Request;
 use Neat\Http\Routing\Routing;
 use Neat\Http\Routing\RoutingAction;
 use Neat\Http\Routing\RoutingMatch;
-use Neat\Http\Status\HttpStatus;
 use Neat\Tests\Doubles\FakeRequest;
 use Neat\Tests\Stubs\UsersController;
 use PHPUnit\Framework\TestCase;
@@ -18,9 +16,7 @@ use PHPUnit\Framework\TestCase;
 final class RoutingTest extends TestCase
 {
     public function testRouting(): void
-    {
-        new HttpStatus;
-        
+    {        
         // create request mock
         $req = new FakeRequest(
             get: (object) ['num' => '5674'],
