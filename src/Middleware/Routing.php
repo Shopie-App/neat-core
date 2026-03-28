@@ -10,8 +10,6 @@ use Neat\Contracts\Http\MiddlewareInterface;
 use Neat\Contracts\Http\ResponseInterface;
 use Neat\Contracts\Http\Routing\RoutingInterface;
 
-use function Neat\Http\Status\NotFound;
-
 final class Routing implements MiddlewareInterface
 {
     public function __construct(private RoutingInterface $route) {}

@@ -7,8 +7,6 @@ namespace Neat\Exception;
 use Closure;
 use Neat\Contracts\Http\ResponseInterface;
 
-use function Neat\Http\Status\InternalServerError;
-
 class ExceptionHandler
 {
     public function __construct(private ResponseInterface $httpResponse, private Closure $terminateApp)
